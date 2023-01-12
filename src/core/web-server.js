@@ -1,6 +1,7 @@
 const express = require('express');
 const { initializeConfigMiddlewares, initializeErrorMiddlwares } = require('./middlewares');
 const userRoutes = require('../controllers/user.routes');
+const { sequelize } = require('../models/sqlite.db')
 
 class WebServer {
   app = undefined;
@@ -9,7 +10,7 @@ class WebServer {
 
   constructor() {
     this.app = express();
-
+    sequelize.sync()
     initializeConfigMiddlewares(this.app);
     this._initializeRoutes();
     initializeErrorMiddlwares(this.app);
