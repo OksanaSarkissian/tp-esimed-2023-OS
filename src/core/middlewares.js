@@ -3,7 +3,7 @@ var cors = require('cors')
 const { DateTime } = require('luxon');
 
 const initJsonHandlerMiddlware = (app) => app.use(express.json());
-const initCORSMiddleware = (app) => { app.options('*', cors()),app.use(cors())}
+const initCORSMiddleware = (app) => { app.use(cors())}
 
 const initLoggerMiddlware = (app) => {
   app.use((req, res, next) => {
