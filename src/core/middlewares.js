@@ -31,7 +31,7 @@ const initStaticMiddleware = (app) => app.use(express.static('public'));
 const initJWTMiddleware = (app) => {
   app.use(
     jwt({
-      secret: "secretKey",
+      secret: process.env.JWT_SECRET,
       algorithms: ["HS256"],
     }).unless({
       path: [{ url: "/users", methods: ["POST"] }, "/auth/login"]

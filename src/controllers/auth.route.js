@@ -3,12 +3,15 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
+const {body, validationResult} = require('express-validator')
 
 
-router.post('/login', async (req, res) => {
-    if (!req.body.firstName || !req.body.password) {
-        res.status(400).send("Paramètres manquants")
-    } else {
+
+router.post('/login',body('firstName').not().isEmpty(),body('password').not().isEmpty(), async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(403).send('Forbidden');
+    }
         const foundUser = await userRepository.getUserByFirstName(req.body.firstName);
         if (foundUser) {
             if (bcrypt.compare(req.body.password, foundUser.password)) {
@@ -25,6 +28,6 @@ router.post('/login', async (req, res) => {
             res.status(400).send("Mot de passe ou utilisateur incorrect");
         }
     }
-    })
+    )
 
 exports.initializeRoutes = () => router;
