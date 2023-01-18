@@ -3,10 +3,10 @@ const router = express.Router();
 const userRepository = require('../models/user-repository');
 
 router.get('/', async (req, res) => {
-  res.send( await userRepository.getUsers());
+  res.send(await userRepository.getUsers());
 });
 
-router.get('/:firstName', async(req, res) => {
+router.get('/:firstName', async (req, res) => {
   const foundUser = await userRepository.getUserByFirstName(req.params.firstName);
 
   if (!foundUser) {
@@ -17,14 +17,18 @@ router.get('/:firstName', async(req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const existingUser = await userRepository.getUserByFirstName(req.body.firstName);
+  if (!req.body.firstName || !req.body.lastName || !req.body.password) {
+    res.status(400).send("Paramètres manquants")
+  } else {
+    const existingUser = await userRepository.getUserByFirstName(req.body.firstName);
 
-  if (existingUser) {
-    throw new Error('Unable to create the user');
+    if (existingUser) {
+      throw new Error('Unable to create the user');
+    }
+
+    await userRepository.createUser(req.body);
+    res.status(201).end();
   }
-
-  await userRepository.createUser(req.body);
-  res.status(201).end();
 });
 
 router.put('/:id', async (req, res) => {
@@ -32,7 +36,7 @@ router.put('/:id', async (req, res) => {
   res.status(204).end();
 });
 
-router.delete('/:id', async(req, res) => {
+router.delete('/:id', async (req, res) => {
   await userRepository.deleteUser(req.params.id);
   res.status(204).end();
 });

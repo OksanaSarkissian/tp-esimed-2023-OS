@@ -1,6 +1,6 @@
 const { users } = require('./db');
 const uuid = require('uuid');
-const md5 = require('md5');
+const bcrypt = require('bcryptjs')
 const { User } = require('../models/user.model.js');
 
 
@@ -16,8 +16,8 @@ exports.getUserByFirstName = async (firstName) => {
 }
 
 exports.createUser = async (body) => {
-  console.log("---------------------", body)
-  const hashedPassword = md5(body.password);
+  const hashedPassword = await bcrypt.hashSync(body.password, 12)
+  console.log("---------------------", hashedPassword)
   const user = body;
   user.password = hashedPassword;
 
@@ -42,7 +42,7 @@ exports.updateUser = async (id, data) => {
   await User.update({
     firstName: data.firstName || foundUser.firstName,
     lastName: data.lastName || foundUser.lastName,
-    password: data.password ? md5(data.password) : foundUser.password
+    password: data.password ? bcrypt.hashSync(data.password, 12) : foundUser.password
 
   }, {
     where: {
