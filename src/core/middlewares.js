@@ -34,7 +34,7 @@ const initJWTMiddleware = (app) => {
       secret: "secretKey",
       algorithms: ["HS256"],
     }).unless({
-      path: [{url: "/users", methods: ["POST"]},"/auth/login"]
+      path: [{ url: "/users", methods: ["POST"] }, "/auth/login"]
     })
   )
 }
@@ -49,6 +49,10 @@ exports.initializeConfigMiddlewares = (app) => {
 
 exports.initializeErrorMiddlwares = (app) => {
   app.use((err, req, res, next) => {
-    res.status(500).send(err.message);
+    if (err.code === 'permission_denied') {
+      res.status(403).send('Forbidden');
+    } else {
+      res.status(500).send(err.message);
+    }
   });
 }

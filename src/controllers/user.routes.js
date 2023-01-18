@@ -2,12 +2,14 @@ const express = require('express');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
 require('dotenv').config()
+const guard = require('express-jwt-permissions')({requestProperty: 'auth'});
+const {body, validationResult} = require('express-validator')
 
 router.get('/', async (req, res) => {
   res.send(await userRepository.getUsers());
 });
 
-router.get('/:firstName', async (req, res) => {
+router.get('/:firstName', guard.check('admin'), async (req, res) => {
   const foundUser = await userRepository.getUserByFirstName(req.params.firstName);
 
   if (!foundUser) {
@@ -17,10 +19,11 @@ router.get('/:firstName', async (req, res) => {
   res.send(foundUser);
 });
 
-router.post('/', async (req, res) => {
-  if (!req.body.firstName || !req.body.lastName || !req.body.password) {
-    res.status(400).send("Paramètres manquants")
-  } else {
+router.post('/',body('firstName').not().isEmpty().isAlphanumeric().isLength({ min: 5 }),body('lastName').not().isEmpty().isAlphanumeric().isLength({ min: 5 }), body('password').not().isEmpty().isAlphanumeric().isLength({ min: 5 }), async (req, res) => {
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(403).send('Forbidden');
+    }
     const existingUser = await userRepository.getUserByFirstName(req.body.firstName);
 
     if (existingUser) {
@@ -30,14 +33,14 @@ router.post('/', async (req, res) => {
     await userRepository.createUser(req.body);
     res.status(201).end();
   }
-});
+);
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', guard.check('admin'), async (req, res) => {
   await userRepository.updateUser(req.params.id, req.body);
   res.status(204).end();
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', guard.check('admin'), async (req, res) => {
   await userRepository.deleteUser(req.params.id);
   res.status(204).end();
 });

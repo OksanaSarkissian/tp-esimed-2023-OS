@@ -2,6 +2,7 @@ const { users } = require('./db');
 const uuid = require('uuid');
 const bcrypt = require('bcryptjs')
 const { User } = require('../models/user.model.js');
+const { UUIDV4 } = require('sequelize');
 
 
 exports.getUsers = async () => { return await User.findAll() };
@@ -20,7 +21,7 @@ exports.createUser = async (body) => {
   console.log("---------------------", hashedPassword)
   const user = body;
   user.password = hashedPassword;
-
+  user.id = uuid.v4()
   await User.create(user);
 };
 

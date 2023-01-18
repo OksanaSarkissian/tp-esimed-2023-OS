@@ -1,13 +1,14 @@
 const { DataTypes } = require('sequelize');
 const {sequelize} = require('../models/sqlite.db')
-exports.User = sequelize.define('User', {
+exports.User = sequelize.define('User', {   
     id : {
         primaryKey: true,
-        type : DataTypes.INTEGER,
-        autoIncrement : true,
+        type : DataTypes.STRING,
         allowNull: false
-    },
-    firstName : {
+    },isAdmin : {
+        type : DataTypes.BOOLEAN,
+        allowNull: false
+    },firstName : {
         type : DataTypes.STRING,
         allowNull: false
     },
