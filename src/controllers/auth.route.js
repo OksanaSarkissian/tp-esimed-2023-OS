@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
-const SECRET = 'secretKey'
 
 
 router.post('/login', async (req, res) => {
@@ -16,10 +15,8 @@ router.post('/login', async (req, res) => {
             if (bcrypt.compare(req.body.password, foundUser.password)) {
                 res.status(200).send(jwt.sign({
                     firstName: req.body.firstName
-                }, SECRET, { expiresIn: '1h' }))
-            console.log("token: " , jwt.sign({
-                firstName: req.body.firstName
-            }, SECRET, { expiresIn: '1h' }))} else {
+                }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN }))
+            } else {
                 res.status(401).send("Mot de passe ou utilisateur incorrect")
             }
 

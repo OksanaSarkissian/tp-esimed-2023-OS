@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userRepository = require('../models/user-repository');
+require('dotenv').config()
 
 router.get('/', async (req, res) => {
   res.send(await userRepository.getUsers());
