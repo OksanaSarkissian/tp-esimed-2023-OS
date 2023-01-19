@@ -17,9 +17,7 @@ test('GET /users with jwt', async () => {
 
   const jwt = res.text;
 
-  res = await request(apiUrl)
-    .get('/users')
-    .set('Authorization', `Bearer ${jwt}`);
+  res = await request(apiUrl).get('/users').set('Authorization', `Bearer ${jwt}`);
   console.log(res.body);
   expect(res.statusCode).toEqual(200);
   expect(res.body.length).toEqual(1);

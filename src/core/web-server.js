@@ -1,8 +1,5 @@
 const express = require('express');
-const {
-  initializeConfigMiddlewares,
-  initializeErrorMiddlwares,
-} = require('./middlewares');
+const { initializeConfigMiddlewares, initializeErrorMiddlwares } = require('./middlewares');
 const userRoutes = require('../controllers/user.routes');
 const authRoutes = require('../controllers/auth.route');
 

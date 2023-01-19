@@ -21,9 +21,7 @@ const initLoggerMiddlware = (app) => {
       const requestDurationMs = end.diff(begin).toMillis();
       const requestDuration = `Duration: ${requestDurationMs}ms`;
 
-      console.log(
-        `[${requestDate}] - [${remoteIP}] - [${httpInfo}] - [${requestDuration}]`
-      );
+      console.log(`[${requestDate}] - [${remoteIP}] - [${httpInfo}] - [${requestDuration}]`);
     });
     next();
   });
@@ -38,7 +36,7 @@ const initJWTMiddleware = (app) => {
       algorithms: ['HS256'],
     }).unless({
       path: [{ url: '/users', methods: ['POST'] }, '/auth/login'],
-    })
+    }),
   );
 };
 

@@ -11,9 +11,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:firstName', guard.check('admin'), async (req, res) => {
-  const foundUser = await userRepository.getUserByFirstName(
-    req.params.firstName
-  );
+  const foundUser = await userRepository.getUserByFirstName(req.params.firstName);
 
   if (!foundUser) {
     throw new Error('User not found');
@@ -34,9 +32,7 @@ router.post(
       res.status(500).send(e.message);
       return;
     }
-    const existingUser = await userRepository.getUserByFirstName(
-      req.body.firstName
-    );
+    const existingUser = await userRepository.getUserByFirstName(req.body.firstName);
 
     if (existingUser) {
       return res.status(500).send('Impossible de créer cet utilisateur');
@@ -44,7 +40,7 @@ router.post(
 
     await userRepository.createUser(req.body);
     res.status(201).end();
-  }
+  },
 );
 
 router.put('/:id', guard.check('admin'), async (req, res) => {

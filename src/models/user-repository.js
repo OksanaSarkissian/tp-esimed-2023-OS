@@ -9,7 +9,7 @@ exports.getUsers = async () => {
 exports.getUserByFirstName = async (firstName) => {
   const userToFind = await User.findAll({
     where: {
-      firstName
+      firstName,
     },
   });
   return userToFind[0];
@@ -27,7 +27,7 @@ exports.createUser = async (body) => {
 exports.updateUser = async (id, data) => {
   const foundUser = await User.findAll({
     where: {
-      id
+      id,
     },
   });
 
@@ -39,22 +39,20 @@ exports.updateUser = async (id, data) => {
     {
       firstName: data.firstName || foundUser.firstName,
       lastName: data.lastName || foundUser.lastName,
-      password: data.password
-        ? bcrypt.hashSync(data.password, 12)
-        : foundUser.password,
+      password: data.password ? bcrypt.hashSync(data.password, 12) : foundUser.password,
     },
     {
       where: {
-        id
+        id,
       },
-    }
+    },
   );
 };
 
 exports.deleteUser = async (id) => {
   const userFound = await User.findAll({
     where: {
-      id
+      id,
     },
   });
 
@@ -64,7 +62,7 @@ exports.deleteUser = async (id) => {
 
   await User.destroy({
     where: {
-      id
+      id,
     },
   });
 };
