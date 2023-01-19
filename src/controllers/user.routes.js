@@ -27,7 +27,7 @@ router.post('/',body('firstName').not().isEmpty().isAlphanumeric().isLength({ mi
     const existingUser = await userRepository.getUserByFirstName(req.body.firstName);
 
     if (existingUser) {
-      throw new Error('Unable to create the user');
+      return res.status(500).send('Impossible de créer cet utilisateur');
     }
 
     await userRepository.createUser(req.body);

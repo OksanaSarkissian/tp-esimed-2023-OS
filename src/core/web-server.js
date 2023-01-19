@@ -13,6 +13,7 @@ class WebServer {
   constructor() {
     this.app = express();
     sequelize.sync()
+    console.log("sequelize",sequelize.sync())
     initializeConfigMiddlewares(this.app);
     this._initializeRoutes();
     initializeErrorMiddlwares(this.app);
@@ -21,6 +22,7 @@ class WebServer {
   start() {
     this.server = this.app.listen(this.port, () => {
       console.log(`Example app listening on port ${this.port}`);
+      console.log(process.env.NODE_ENV);
     });
   }
 

@@ -14,7 +14,7 @@ router.post('/login',body('firstName').not().isEmpty(),body('password').not().is
     }
         const foundUser = await userRepository.getUserByFirstName(req.body.firstName);
         if (foundUser) {
-            if (bcrypt.compare(req.body.password, foundUser.password)) {
+            if (await bcrypt.compare(req.body.password, foundUser.password)) {
                 res.status(200).send(jwt.sign({
                     id : req.body.id,
                     firstName: req.body.firstName,
