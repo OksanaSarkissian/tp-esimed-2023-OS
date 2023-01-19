@@ -1,4 +1,5 @@
 const request = require('supertest');
+const apiUrl = 'http://localhost:3000';
 
 test('GET /users without jwt', async () => {
   const res = await request(apiUrl).get('/users');
@@ -16,8 +17,10 @@ test('GET /users with jwt', async () => {
 
   const jwt = res.text;
 
-  res = await request(apiUrl).get('/users').set('Authorization', `Bearer ${jwt}`);
-console.log(res.body)
+  res = await request(apiUrl)
+    .get('/users')
+    .set('Authorization', `Bearer ${jwt}`);
+  console.log(res.body);
   expect(res.statusCode).toEqual(200);
   expect(res.body.length).toEqual(1);
   expect(res.body[0]).toMatchObject({

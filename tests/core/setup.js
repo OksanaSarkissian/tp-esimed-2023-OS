@@ -1,10 +1,9 @@
 require('dotenv').config();
 const WebServer = require('../../src/core/web-server');
-const {User} = require('../../src/models/user.model.js');
-const bcrypt = require('bcryptjs')
+const { User } = require('../../src/models/user.model.js');
 
 module.exports = async () => {
-  const webServer =  new WebServer();
+  const webServer = new WebServer();
   webServer.start();
   global.webServer = webServer;
 
@@ -13,6 +12,6 @@ module.exports = async () => {
     isAdmin: true,
     firstName: 'Lorem',
     lastName: 'Ipsum',
-    password: '$2a$12$fN90KmxobuGypSm.apeA5.S8eqvAXk40JZ0DKVIX1cBRQlYqfbu6.', // "password"
+    password: '$2a$12$fN90KmxobuGypSm.apeA5.S8eqvAXk40JZ0DKVIX1cBRQlYqfbu6.', // 'password'
   });
-}
+};
