@@ -4,6 +4,7 @@ const userRepository = require('../models/user-repository');
 require('dotenv').config()
 const guard = require('express-jwt-permissions')({requestProperty: 'auth'});
 const {body, validationResult} = require('express-validator')
+const { validateBody } = require('./validation/route.validator');
 
 router.get('/', async (req, res) => {
   res.send(await userRepository.getUsers());
@@ -20,10 +21,12 @@ router.get('/:firstName', guard.check('admin'), async (req, res) => {
 });
 
 router.post('/',body('firstName').not().isEmpty().isAlphanumeric().isLength({ min: 5 }),body('lastName').not().isEmpty().isAlphanumeric().isLength({ min: 5 }), body('password').not().isEmpty().isAlphanumeric().isLength({ min: 5 }), async (req, res) => {
-  const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(403).send('Forbidden');
-    }
+  try {
+    validateBody(req);
+  } catch (e) {
+    res.status(500).send(e.message);
+    return;
+  }
     const existingUser = await userRepository.getUserByFirstName(req.body.firstName);
 
     if (existingUser) {

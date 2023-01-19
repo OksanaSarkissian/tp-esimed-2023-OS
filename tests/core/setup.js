@@ -14,15 +14,5 @@ module.exports = async () => {
     firstName: 'Lorem',
     lastName: 'Ipsum',
     password: '$2a$12$fN90KmxobuGypSm.apeA5.S8eqvAXk40JZ0DKVIX1cBRQlYqfbu6.', // "password"
-    
   });
-
-  await User.create({
-    id: 'blablabla',
-    isAdmin: true,
-    firstName: 'oksana',
-    lastName: 'sarkissian',
-    password: await bcrypt.hashSync('testlength', 12), // "password"
-  });
-
 }
